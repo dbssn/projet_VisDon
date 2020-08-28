@@ -32,16 +32,16 @@ function loadData() {
     d3.csv("../data/donnees_quartiers.csv", function(d) {
         return {
             quartier : d.quartier,
-            prix_moyen : parseFloat(d.prix_moyen).toFixed(2),
-            prix_min : parseFloat(d.prix_min).toFixed(2),
-            prix_max : parseFloat(d.prix_max).toFixed(2),
-            prix_med : parseFloat(d.prix_med).toFixed(2),
+            prix_moyen : parseFloat(parseFloat(d.prix_moyen).toFixed(2)),
+            prix_min : parseFloat(parseFloat(d.prix_min).toFixed(2)),
+            prix_max : parseFloat(parseFloat(d.prix_max).toFixed(2)),
+            prix_med : parseFloat(parseFloat(d.prix_med).toFixed(2)),
             nb_annonces : parseInt(d.nb_annonces),
             nb_log_entier : parseInt(d.nb_log_entier),
             nb_chambre_privee : parseInt(d.nb_chambre_privee),
             nb_chambre_hotel : parseInt(d.nb_chambre_hotel),
             nb_chambre_ptg : parseInt(d.nb_chambre_ptg),
-            occup_max_moy : parseFloat(d.occup_max_moy).toFixed(2)
+            occup_max_moy : parseFloat(parseFloat(d.occup_max_moy).toFixed(2))
         }
     }).then(onDataLoaded);
 }
