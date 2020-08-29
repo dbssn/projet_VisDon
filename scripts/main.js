@@ -20,6 +20,7 @@ let chartQuartierScaleY;
 let chartQuartierColorScale;
 
 let currentDimension = "prix_moyen"
+let currentNbgh = "El Raval"
 
 // Fonction setup
 function setup() {
@@ -50,13 +51,13 @@ function onDataLoaded(data) {
     
     quartierData = data;
 
-    console.log(quartierData)
-
     optionsSetAndRefresh();
     
     setupChartQuartier(currentDimension);
     
     graphChartQuartier(currentDimension);
+
+    setupInfo("El Raval");
     
 }
 
@@ -139,6 +140,77 @@ function setupChartQuartier(dimension) {
         setupChartQuartier(currentDimension);
         graphChartQuartier(currentDimension);
     })
+}
+
+function setupInfo(neighbourhood) {
+
+    // Si un svg existe, il est d'abord supprimé
+    const oldSvgBis = d3.select(".info")
+    .select("svg")
+    
+    if (oldSvgBis) {
+        oldSvgBis.remove()
+    }
+
+    // Création du SVG pour cette visualisation
+    const svg = d3.select(".info")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("style", "font: 10px sans-serif");
+    
+    // Axe horizontal
+    chartInfoScaleX = d3.scaleLinear()
+    .domain([0, quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_annonces"]])
+    .range([margin.left + 1 , width - margin.right]);
+
+    // Création d'un objet contenant les nb d'annonces par type de logement
+    const nbParType = {
+        "Logements entiers" : quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_log_entier"],
+        "Chambre privée" : quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_chambre_privee"],
+        "Chambre d'hôtel" : quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_chambre_hotel"],
+        "Chambre partagée" : quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_chambre_ptg"]
+    }
+    
+    // Axe vertical
+    chartInfoScaleY = d3.scaleBand()
+    .domain(d3.keys(nbParType))
+    .range([height - margin.bottom - 5, margin.top])
+    .padding(0.1)
+    .round(true);
+    
+    // Echelle de couleur
+    chartInfoColorScale = d3.scaleSequential()
+    .domain([0, quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_annonces"]])
+    .interpolator(d3.interpolateOranges);
+    
+    // Création de groupes SVG pour les barres et titres
+    chartInfoBars = svg.append("g");
+    chartInfoTitles = svg.append("g")
+    .style("fill", "white")
+    .attr("text-anchor", "end")
+    .attr("transform", `translate(-5, ${chartInfoScaleY.bandwidth() / 2})`);
+    
+    // Ajouter l'axe horizontal
+    svg.append("g")
+    .attr("transform", `translate(0, ${height - margin.bottom})`)
+    .call(d3.axisBottom(chartInfoScaleX))
+    .call(g => g.select(".domain"));
+    
+    // Ajouter l'axe vertical
+    svg.append("g")
+    .attr("transform", `translate(${margin.left}, 0)`)
+    .call(d3.axisLeft(chartInfoScaleY))
+    .call(g => g.select(".domain").remove());
+
+    // Evénement de changement dans le menu déroulant (dimension)
+    //d3.select("#info").on("change", (e) => {
+        //const nbgh = d3.event.target.value;
+        //currentNbgh = nbgh;
+        //optionsSetAndRefresh();
+        //setupInfoQuartier(currentDimension);
+        //graphInfoQuartier(currentDimension);
+    //})
 }
 
 function graphChartQuartier(dimension) {
