@@ -60,6 +60,8 @@ function onDataLoaded(data) {
     graphChartQuartier(currentDimension);
     
     setupInfo(currentNbgh);
+
+    graphInfo(currentNbgh);
     
 }
 
@@ -140,7 +142,7 @@ function setupChartQuartier(dimension) {
     chartQuartierBars = svg.append("g");
     chartQuartierTitles = svg.append("g")
     .style("fill", "white")
-    .attr("text-anchor", "end")
+    .attr("text-anchor", "start")
     .attr("transform", `translate(-5, ${chartQuartierScaleY.bandwidth() / 2})`);
     
     // Ajouter l'axe horizontal
@@ -188,16 +190,16 @@ function setupInfo(neighbourhood) {
     .range([margin.left + 1 , width - margin.right]);
     
     // Création d'un objet contenant les nb d'annonces par type de logement
-    const nbParType = {
-        "Logements entiers" : quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_log_entier"],
-        "Chambre privée" : quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_chambre_privee"],
-        "Chambre d'hôtel" : quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_chambre_hotel"],
-        "Chambre partagée" : quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_chambre_ptg"]
-    }
+    const listeType = [
+        "Logements entiers",
+        "Chambre privée",
+        "Chambre d'hôtel",
+        "Chambre partagée"
+    ]
     
     // Axe vertical
     chartInfoScaleY = d3.scaleBand()
-    .domain(d3.keys(nbParType))
+    .domain(listeType)
     .range([height - margin.bottom - 5, margin.top])
     .padding(0.1)
     .round(true);
@@ -211,7 +213,7 @@ function setupInfo(neighbourhood) {
     chartInfoBars = svg.append("g");
     chartInfoTitles = svg.append("g")
     .style("fill", "white")
-    .attr("text-anchor", "end")
+    .attr("text-anchor", "start")
     .attr("transform", `translate(-5, ${chartInfoScaleY.bandwidth() / 2})`);
     
     // Ajouter l'axe horizontal
@@ -231,8 +233,8 @@ function setupInfo(neighbourhood) {
         const nbgh = d3.event.target.value;
         currentNbgh = nbgh;
         optionsSetAndRefreshInfo();
-        //setupInfoQuartier(currentDimension);
-        //graphInfoQuartier(currentDimension);
+        setupInfo(currentNbgh);
+        graphInfo(currentNbgh);
     })
 }
 
@@ -255,9 +257,54 @@ function graphChartQuartier(dimension) {
     .data(data)
     .join("text")
     .attr("dy", "0.35em")
-    .attr("x", d => chartQuartierScaleX(d[dimension]))
+    .attr("x", d => chartQuartierScaleX(d[dimension]) + 15)
     .attr("y", d => chartQuartierScaleY(d.quartier))
     .text(d => d[dimension])
+}
+
+function graphInfo(neighbourhood) {
+    
+    const nbParType = [
+        {
+            "dim" : "Logements entiers",
+            "val" : quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_log_entier"]
+        },
+        {
+            "dim" : "Chambre privée",
+            "val" : quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_chambre_privee"]
+        },
+        {
+            "dim" : "Chambre d'hôtel",
+            "val" : quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_chambre_hotel"]
+        },
+        {
+            "dim" : "Chambre partagée",
+            "val": quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_chambre_ptg"]
+        }
+    ];
+
+    const data = nbParType;
+
+    console.log(data);
+    
+    // Ajout des barres
+    chartInfoBars.selectAll("rect")
+    .data(data)
+    .join("rect")
+    .attr("width", d => chartInfoScaleX(d.val) - chartInfoScaleX(0))
+    .attr("height", chartInfoScaleY.bandwidth())
+    .attr("x", d => chartInfoScaleX(0))
+    .attr("y", d => chartInfoScaleY(d.dim))
+    .style("fill", d => chartInfoColorScale(d.val))
+    
+    // Ajout des titres
+    chartInfoTitles.selectAll("text")
+    .data(data)
+    .join("text")
+    .attr("dy", "0.35em")
+    .attr("x", d => chartInfoScaleX(d.val) + 15)
+    .attr("y", d => chartInfoScaleY(d.dim))
+    .text(d => d.val)
 }
 
 // Appel à setup
