@@ -1,5 +1,48 @@
 body {
-    margin: 1em;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    background-color: #cccccc;
+    background-color: white;
 }
+
+body, html {
+    height: 100%;
+}
+
+h1 {
+    color : white;
+    font-family: "Fredoka One";
+}
+
+h2 {
+    color : #404040;
+}
+
+.header-image {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("../barcelona.jpg");
+    height: 30%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.header-text {
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+  }
+
+.quartierChart {
+    margin: 1em;
+}
+
+.info {
+    margin: 1em;
+}
+
+.vl {
+    border-left: 6px solid black;
+    height: 600px;
+  }

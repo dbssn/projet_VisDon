@@ -20,7 +20,7 @@ let chartQuartierScaleY;
 let chartQuartierColorScale;
 
 let currentDimension = "prix_moyen"
-let currentNbgh = "El Raval"
+let currentNbgh = "Diagonal Mar i el Front Marítim del Poblenou"
 
 // Fonction setup
 function setup() {
@@ -141,7 +141,7 @@ function setupChartQuartier(dimension) {
     // Création de groupes SVG pour les barres et titres
     chartQuartierBars = svg.append("g");
     chartQuartierTitles = svg.append("g")
-    .style("fill", "white")
+    .style("fill", "black")
     .attr("text-anchor", "start")
     .attr("transform", `translate(-5, ${chartQuartierScaleY.bandwidth() / 2})`);
     
@@ -212,7 +212,7 @@ function setupInfo(neighbourhood) {
     // Création de groupes SVG pour les barres et titres
     chartInfoBars = svg.append("g");
     chartInfoTitles = svg.append("g")
-    .style("fill", "white")
+    .style("fill", "black")
     .attr("text-anchor", "start")
     .attr("transform", `translate(-5, ${chartInfoScaleY.bandwidth() / 2})`);
     
