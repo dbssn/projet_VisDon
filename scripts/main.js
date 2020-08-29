@@ -50,14 +50,16 @@ function loadData() {
 function onDataLoaded(data) {
     
     quartierData = data;
-
+    
     optionsSetAndRefresh();
+
+    optionsSetAndRefreshInfo()
     
     setupChartQuartier(currentDimension);
     
     graphChartQuartier(currentDimension);
-
-    setupInfo("El Raval");
+    
+    setupInfo(currentNbgh);
     
 }
 
@@ -79,8 +81,29 @@ function optionsSetAndRefresh() {
     })
 }
 
-function setupChartQuartier(dimension) {
+function optionsSetAndRefreshInfo() {
+    
+    const neighbourhoods = quartierData.map(d => d.quartier)
+ 
+    d3.select("#neighbourhoods")
+    .selectAll("option")
+    .data(neighbourhoods)
+    .join("option")
+    .attr("value", d => d)
+    .text(d => d)
+    .each(function(d) {
+        const option = d3.select(this);
+        if (d === currentNbgh) {
+            option.attr("selected", "");
+        }
+        else {
+            option.attr("selected", null);
+        }
+    })
+}
 
+function setupChartQuartier(dimension) {
+    
     // Si un svg existe, il est d'abord supprimé
     const oldSvg = d3.select(".quartierChart")
     .select("svg")
@@ -88,7 +111,7 @@ function setupChartQuartier(dimension) {
     if (oldSvg) {
         oldSvg.remove()
     }
-
+    
     // Création du SVG pour cette visualisation
     const svg = d3.select(".quartierChart")
     .append("svg")
@@ -131,7 +154,7 @@ function setupChartQuartier(dimension) {
     .attr("transform", `translate(${margin.left}, 0)`)
     .call(d3.axisLeft(chartQuartierScaleY))
     .call(g => g.select(".domain").remove());
-
+    
     // Evénement de changement dans le menu déroulant (dimension)
     d3.select("#dimensions").on("change", (e) => {
         const dimension = d3.event.target.value;
@@ -143,7 +166,7 @@ function setupChartQuartier(dimension) {
 }
 
 function setupInfo(neighbourhood) {
-
+    
     // Si un svg existe, il est d'abord supprimé
     const oldSvgBis = d3.select(".info")
     .select("svg")
@@ -151,7 +174,7 @@ function setupInfo(neighbourhood) {
     if (oldSvgBis) {
         oldSvgBis.remove()
     }
-
+    
     // Création du SVG pour cette visualisation
     const svg = d3.select(".info")
     .append("svg")
@@ -163,7 +186,7 @@ function setupInfo(neighbourhood) {
     chartInfoScaleX = d3.scaleLinear()
     .domain([0, quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_annonces"]])
     .range([margin.left + 1 , width - margin.right]);
-
+    
     // Création d'un objet contenant les nb d'annonces par type de logement
     const nbParType = {
         "Logements entiers" : quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_log_entier"],
@@ -202,19 +225,19 @@ function setupInfo(neighbourhood) {
     .attr("transform", `translate(${margin.left}, 0)`)
     .call(d3.axisLeft(chartInfoScaleY))
     .call(g => g.select(".domain").remove());
-
-    // Evénement de changement dans le menu déroulant (dimension)
-    //d3.select("#info").on("change", (e) => {
-        //const nbgh = d3.event.target.value;
-        //currentNbgh = nbgh;
-        //optionsSetAndRefresh();
+    
+    // Evénement de changement dans le menu déroulant (quartier)
+    d3.select("#neighbourhoods").on("change", (e) => {
+        const nbgh = d3.event.target.value;
+        currentNbgh = nbgh;
+        optionsSetAndRefreshInfo();
         //setupInfoQuartier(currentDimension);
         //graphInfoQuartier(currentDimension);
-    //})
+    })
 }
 
 function graphChartQuartier(dimension) {
-        
+    
     const data = quartierData;
     
     // Ajout des barres
