@@ -1,5 +1,5 @@
 // Paramètres de visualisation
-const width = 600;
+const width = 550;
 const height = 600;
 const margin = { top: 20, right: 50, bottom: 20, left: 230 };
 
@@ -371,7 +371,7 @@ function infoRight(neighbourhood) {
     // Création du SVG pour cette visualisation
     const svg = d3.select(".rightInfo")
     .append("svg")
-    .attr("width", width - 100)
+    .attr("width", width - 140)
     .attr("height", height)
     .attr("style", "font: 12px sans-serif");
     
@@ -379,7 +379,7 @@ function infoRight(neighbourhood) {
     infoRightTitle = svg.append("g")
     .style("fill", "#800000")
     .attr("text-anchor", "middle")
-    .attr("transform", `translate(-305, 120)`)
+    .attr("transform", `translate(-320, 120)`)
     .attr("class" , "nbghTitle");
     
     // Création d'un groupe pour les dimensions (prix moy, prix med, ...)
@@ -388,14 +388,14 @@ function infoRight(neighbourhood) {
     .style("font-size", "16px")
     .style("font-weight", "bold")
     .attr("text-anchor", "start")
-    .attr("transform", `translate(-340, 120)`);
+    .attr("transform", `translate(-370 120)`);
     
     // Création d'un groupe pour les valeurs associées aux dimensions
     chartInfoRight = svg.append("g")
     .style("fill", "black")
     .style("font-size", "16px")
     .attr("text-anchor", "start")
-    .attr("transform", `translate(-70, 120)`);
+    .attr("transform", `translate(-80, 120)`);
     
     // Création d'un nouvel objet pour l'affichage itératif
     const data = retrieveStatsNbgh(quartierData, currentNbgh);
@@ -404,7 +404,6 @@ function infoRight(neighbourhood) {
     infoRightTitle.selectAll("text")
     .data([1])
     .join("text")
-    .attr("dy", "0.35em")
     .attr("x", 520)
     .attr("y", 25)
     .text(currentNbgh);
@@ -413,7 +412,6 @@ function infoRight(neighbourhood) {
     chartDimRight.selectAll("text")
     .data(data)
     .join("text")
-    .attr("dy", "0.35em")
     .attr("x", d => 400)
     .attr("y", d => 100 + data.indexOf(d)*70)
     .text(d => d.dim + " :");
@@ -422,7 +420,6 @@ function infoRight(neighbourhood) {
     chartInfoRight.selectAll("text")
     .data(data)
     .join("text")
-    .attr("dy", "0.35em")
     .attr("x", d => 400)
     .attr("y", d => 100 + data.indexOf(d)*70)
     .text(d => d.val);

@@ -36,7 +36,7 @@ h2 {
 
 .quartierChart {
     margin: 1em;
-    width: 37%;
+    width: 36%;
     height: 100%;
     float: left;
     border-collapse: collapse;
@@ -44,7 +44,7 @@ h2 {
 
 .info {
     margin: 1em;
-    width: 27%;
+    width: 31%;
     height: 100%;
     float: left;
     border-collapse: collapse;
@@ -57,7 +57,7 @@ h2 {
 
 .rightInfo {
     margin: 1em;
-    width: 27%;
+    width: 26%;
     height: 100%;
     position: relative;
     float: right;
@@ -65,13 +65,13 @@ h2 {
 }
 
 .nbghTitle {
-    font-size: 20px;
+    font-size: 19px;
     font-weight: bold;
 }
 
 .notes {
     position: absolute;
-    top: 930px;
+    top: 960px;
     left: 20px;
 }
 
