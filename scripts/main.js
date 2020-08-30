@@ -32,7 +32,7 @@ function setup() {
 
 function loadData() {
     // Chargement des données, puis une fois la promise résolue, appel à onDataLoaded
-    d3.csv("../data/donneeQuartiers.csv", function(d) {
+    d3.csv("../data/donneesQuartiers.csv", function(d) {
         return {
             quartier : d.quartier,
             prix_moyen : parseFloat(parseFloat(d.prix_moyen).toFixed(2)),
