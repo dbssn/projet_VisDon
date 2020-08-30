@@ -385,7 +385,7 @@ function infoRight(neighbourhood) {
     // Création d'un groupe pour les dimensions (prix moy, prix med, ...)
     chartDimRight = svg.append("g")
     .style("fill", "black")
-    .style("font-size", "16px")
+    .style("font-size", "15px")
     .style("font-weight", "bold")
     .attr("text-anchor", "start")
     .attr("transform", `translate(-370 120)`);
@@ -393,7 +393,7 @@ function infoRight(neighbourhood) {
     // Création d'un groupe pour les valeurs associées aux dimensions
     chartInfoRight = svg.append("g")
     .style("fill", "black")
-    .style("font-size", "16px")
+    .style("font-size", "15px")
     .attr("text-anchor", "start")
     .attr("transform", `translate(-80, 120)`);
     
