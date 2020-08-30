@@ -183,7 +183,7 @@ function setupChartQuartier(dimension) {
     // Création du SVG pour cette visualisation
     const svg = d3.select(".quartierChart")
     .append("svg")
-    .attr("width", width)
+    .attr("width", width -20)
     .attr("height", height)
     .attr("style", "font: 12px sans-serif");
     
