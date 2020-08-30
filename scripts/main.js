@@ -258,7 +258,7 @@ function setupInfo(neighbourhood) {
     
     // Création d'un objet contenant les nb d'annonces par type de logement
     const listeType = [
-        "Logements entiers",
+        "Logement entier",
         "Chambre privée",
         "Chambre d'hôtel",
         "Chambre partagée"
