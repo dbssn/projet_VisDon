@@ -18,7 +18,7 @@ h2 {
 
 .header-image {
     background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("../barcelona.jpg");
-    height: 30%;
+    height: 200px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -32,17 +32,39 @@ h2 {
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
-  }
+}
 
 .quartierChart {
     margin: 1em;
+    width: 37%;
+    height: 100%;
+    float: left;
+    border-collapse: collapse;
 }
 
 .info {
     margin: 1em;
+    width: 27%;
+    height: 100%;
+    float: left;
+    border-collapse: collapse;
 }
 
-.vl {
-    border-left: 6px solid black;
-    height: 600px;
-  }
+.container {
+    width: 100%;
+    height: 100%;
+}
+
+.rightInfo {
+    margin: 1em;
+    width: 27%;
+    height: 100%;
+    position: relative;
+    float: right;
+    border-collapse: collapse;
+}
+
+.nbghTitle {
+    font-size: 20px;
+    font-weight: bold;
+}

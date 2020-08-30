@@ -1,5 +1,5 @@
 // Paramètres de visualisation
-const width = 800;
+const width = 600;
 const height = 600;
 const margin = { top: 20, right: 50, bottom: 20, left: 230 };
 
@@ -8,11 +8,12 @@ const dimensions = [
     {id : "prix_moyen", name : "Prix moyen par personne"},
     {id : "prix_med", name : "Prix médian par personne"},
     {id : "nb_annonces", name : "Nombre total d'annonces"},
-    {id : "occup_max_moy", name : "Occupation maximale moyenne"}
+    {id : "occup_max_moy", name : "Capacité maximale moyenne"}
 ]
 
 // Déclaration des variables
 let quartierData;
+let reversedQuartierData;
 let chartQuartierBars;
 let chartQuartierTitles;
 let chartQuartierScaleX;
@@ -50,6 +51,9 @@ function loadData() {
 function onDataLoaded(data) {
     
     quartierData = data;
+
+    //Inverse de l'array permettant de changer l'ordre d'apparition des quartiers
+    reversedQuartierData = quartierData.slice().reverse();
     
     optionsSetAndRefresh();
 
@@ -62,7 +66,62 @@ function onDataLoaded(data) {
     setupInfo(currentNbgh);
 
     graphInfo(currentNbgh);
+
+    infoRight(currentNbgh);
     
+}
+
+function retrieveDataNbgh(dataSet, nbghX) {
+    const tableau = [
+        {
+            "dim" : "Logements entiers",
+            "val" : dataSet.filter(d => d.quartier === nbghX)[0]["nb_log_entier"]
+        },
+        {
+            "dim" : "Chambre privée",
+            "val" : dataSet.filter(d => d.quartier === nbghX)[0]["nb_chambre_privee"]
+        },
+        {
+            "dim" : "Chambre d'hôtel",
+            "val" : dataSet.filter(d => d.quartier === nbghX)[0]["nb_chambre_hotel"]
+        },
+        {
+            "dim" : "Chambre partagée",
+            "val": dataSet.filter(d => d.quartier === nbghX)[0]["nb_chambre_ptg"]
+        }
+    ];
+
+    return tableau
+}
+
+function retrieveStatsNbgh(dataSet, nbghX) {
+    const tableau = [
+        {
+            "dim" : "Prix moyen",
+            "val" : dataSet.filter(d => d.quartier === nbghX)[0]["prix_moyen"]
+        },
+        {
+            "dim" : "Prix médian",
+            "val" : dataSet.filter(d => d.quartier === nbghX)[0]["prix_med"]
+        },
+        {
+            "dim" : "Prix minimum",
+            "val" : dataSet.filter(d => d.quartier === nbghX)[0]["prix_min"]
+        },
+        {
+            "dim" : "Prix maximum",
+            "val": dataSet.filter(d => d.quartier === nbghX)[0]["prix_max"]
+        },
+        {
+            "dim" : "Nombre d'annonces",
+            "val": dataSet.filter(d => d.quartier === nbghX)[0]["nb_annonces"]
+        },
+        {
+            "dim" : "Capacité maximale moyenne",
+            "val": dataSet.filter(d => d.quartier === nbghX)[0]["occup_max_moy"]
+        }
+    ];
+    return tableau
 }
 
 function optionsSetAndRefresh() {
@@ -105,7 +164,7 @@ function optionsSetAndRefreshInfo() {
 }
 
 function setupChartQuartier(dimension) {
-    
+
     // Si un svg existe, il est d'abord supprimé
     const oldSvg = d3.select(".quartierChart")
     .select("svg")
@@ -119,23 +178,23 @@ function setupChartQuartier(dimension) {
     .append("svg")
     .attr("width", width)
     .attr("height", height)
-    .attr("style", "font: 10px sans-serif");
+    .attr("style", "font: 12px sans-serif");
     
     // Axe horizontal
     chartQuartierScaleX = d3.scaleLinear()
-    .domain([0, d3.max(quartierData, d => d[dimension])])
+    .domain([0, d3.max(reversedQuartierData, d => d[dimension])])
     .range([margin.left + 1 , width - margin.right]);
     
     // Axe vertical
     chartQuartierScaleY = d3.scaleBand()
-    .domain(quartierData.map(d => d.quartier))
+    .domain(reversedQuartierData.map(d => d.quartier))
     .range([height - margin.bottom - 5, margin.top])
     .padding(0.1)
     .round(true);
     
     // Echelle de couleur
     chartQuartierColorScale = d3.scaleSequential()
-    .domain([0, d3.max(quartierData, d => d[dimension])])
+    .domain([0, d3.max(reversedQuartierData, d => d[dimension])])
     .interpolator(d3.interpolateGreens);
     
     // Création de groupes SVG pour les barres et titres
@@ -182,7 +241,7 @@ function setupInfo(neighbourhood) {
     .append("svg")
     .attr("width", width)
     .attr("height", height)
-    .attr("style", "font: 10px sans-serif");
+    .attr("style", "font: 12px sans-serif");
     
     // Axe horizontal
     chartInfoScaleX = d3.scaleLinear()
@@ -235,12 +294,13 @@ function setupInfo(neighbourhood) {
         optionsSetAndRefreshInfo();
         setupInfo(currentNbgh);
         graphInfo(currentNbgh);
+        infoRight(currentNbgh);
     })
 }
 
 function graphChartQuartier(dimension) {
     
-    const data = quartierData;
+    const data = reversedQuartierData;
     
     // Ajout des barres
     chartQuartierBars.selectAll("rect")
@@ -264,28 +324,7 @@ function graphChartQuartier(dimension) {
 
 function graphInfo(neighbourhood) {
     
-    const nbParType = [
-        {
-            "dim" : "Logements entiers",
-            "val" : quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_log_entier"]
-        },
-        {
-            "dim" : "Chambre privée",
-            "val" : quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_chambre_privee"]
-        },
-        {
-            "dim" : "Chambre d'hôtel",
-            "val" : quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_chambre_hotel"]
-        },
-        {
-            "dim" : "Chambre partagée",
-            "val": quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_chambre_ptg"]
-        }
-    ];
-
-    const data = nbParType;
-
-    console.log(data);
+    const data = retrieveDataNbgh(quartierData, currentNbgh);
     
     // Ajout des barres
     chartInfoBars.selectAll("rect")
@@ -305,6 +344,72 @@ function graphInfo(neighbourhood) {
     .attr("x", d => chartInfoScaleX(d.val) + 15)
     .attr("y", d => chartInfoScaleY(d.dim))
     .text(d => d.val)
+}
+
+function infoRight(neighbourhood) {
+    
+    // Si un svg existe, il est d'abord supprimé
+    const oldSvg = d3.select(".rightInfo")
+    .select("svg")
+    
+    if (oldSvg) {
+        oldSvg.remove()
+    }
+    
+    // Création du SVG pour cette visualisation
+    const svg = d3.select(".rightInfo")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("style", "font: 12px sans-serif");
+
+    infoRightTitle = svg.append("g")
+    .style("fill", "#800000")
+    .attr("text-anchor", "middle")
+    .attr("transform", `translate(-305, 120)`)
+    .attr("class" , "nbghTitle");
+
+    chartDimRight = svg.append("g")
+    .style("fill", "black")
+    .style("font-size", "16px")
+    .style("font-weight", "bold")
+    .attr("text-anchor", "start")
+    .attr("transform", `translate(-340, 120)`);
+
+    chartInfoRight = svg.append("g")
+    .style("fill", "black")
+    .style("font-size", "16px")
+    .attr("text-anchor", "start")
+    .attr("transform", `translate(-70, 120)`);
+
+    const data = retrieveStatsNbgh(quartierData, currentNbgh)
+
+    console.log(data);
+
+    infoRightTitle.selectAll("text")
+    .data([1])
+    .join("text")
+    .attr("dy", "0.35em")
+    .attr("x", 520)
+    .attr("y", 25)
+    .text(currentNbgh)
+
+    chartDimRight.selectAll("text")
+    .data(data)
+    .join("text")
+    .attr("dy", "0.35em")
+    .attr("x", d => 400)
+    .attr("y", d => 100 + data.indexOf(d)*70)
+    .text(d => d.dim + " :")
+
+    chartInfoRight.selectAll("text")
+    .data(data)
+    .join("text")
+    .attr("dy", "0.35em")
+    .attr("x", d => 400)
+    .attr("y", d => 100 + data.indexOf(d)*70)
+    .text(d => d.val)
+
 }
 
 // Appel à setup

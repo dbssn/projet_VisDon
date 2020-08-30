@@ -15,22 +15,26 @@
             <h1>L'offre d'Airbnb à Barcelone en quelques chiffres</h1>
         </div>
     </div>
-    <div class="quartierChart" style="float: left;">
-        <h2>Comparaison des quartiers selon plusieurs dimensions</h2>
-        <div>
-            <label for="dimensions">Dimension : </label>
-            <select id="dimensions">
-                <option value="prix_moyen">Prix moyen par personne</option>
-            </select>
+    <div class="container">
+        <div class="quartierChart">
+            <h2>Comparaison des quartiers selon plusieurs dimensions</h2>
+            <div>
+                <em><label for="dimensions">Dimension : </label></em>
+                <select id="dimensions">
+                    <option value="prix_moyen">Prix moyen par personne</option>
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="info" style="float: left;">
-        <h2>Informations spécifiques au quartier</h2>
-        <div>
-            <label for="neighbourhoods">Quartier : </label>
-            <select id="neighbourhoods">
-                <option value="El Raval">El Raval</option>
-            </select>
+        <div class="info">
+            <h2>Informations spécifiques au quartier</h2>
+            <div>
+                <em><label for="neighbourhoods">Quartier : </label></em>
+                <select id="neighbourhoods">
+                    <option value="El Raval">El Raval</option>
+                </select>
+            </div>
+        </div>
+        <div class="rightInfo">
         </div>
     </div>
         <script src="https://d3js.org/d3.v5.min.js"></script>
