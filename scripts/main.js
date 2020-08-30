@@ -371,7 +371,7 @@ function infoRight(neighbourhood) {
     // Création du SVG pour cette visualisation
     const svg = d3.select(".rightInfo")
     .append("svg")
-    .attr("width", width)
+    .attr("width", width - 100)
     .attr("height", height)
     .attr("style", "font: 12px sans-serif");
     
