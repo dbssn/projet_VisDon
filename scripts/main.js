@@ -183,7 +183,7 @@ function setupChartQuartier(dimension) {
     // Création du SVG pour cette visualisation
     const svg = d3.select(".quartierChart")
     .append("svg")
-    .attr("width", width -20)
+    .attr("width", width)
     .attr("height", height)
     .attr("style", "font: 12px sans-serif");
     
@@ -247,14 +247,14 @@ function setupInfo(neighbourhood) {
     // Création du SVG pour cette visualisation
     const svg = d3.select(".info")
     .append("svg")
-    .attr("width", width)
+    .attr("width", width - 10)
     .attr("height", height)
     .attr("style", "font: 12px sans-serif");
     
     // Axe horizontal
     chartInfoScaleX = d3.scaleLinear()
     .domain([0, quartierData.filter(d => d.quartier === neighbourhood)[0]["nb_annonces"]])
-    .range([margin.left + 1 , width - margin.right]);
+    .range([margin.left + 1 , width - 10 - margin.right]);
     
     // Création d'un objet contenant les nb d'annonces par type de logement
     const listeType = [
@@ -326,7 +326,7 @@ function graphChartQuartier(dimension) {
     .data(data)
     .join("text")
     .attr("dy", "0.35em")
-    .attr("x", d => chartQuartierScaleX(d[dimension]) + 15)
+    .attr("x", d => chartQuartierScaleX(d[dimension]) + 10)
     .attr("y", d => chartQuartierScaleY(d.quartier))
     .text(d => d[dimension]);
 }
@@ -352,7 +352,7 @@ function graphInfo(neighbourhood) {
     .data(data)
     .join("text")
     .attr("dy", "0.35em")
-    .attr("x", d => chartInfoScaleX(d.val) + 15)
+    .attr("x", d => chartInfoScaleX(d.val) + 10)
     .attr("y", d => chartInfoScaleY(d.dim))
     .text(d => d.val);
 }
