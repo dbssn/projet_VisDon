@@ -9,7 +9,7 @@ const dimensions = [
     {id : "prix_med", name : "Prix médian par personne (1 nuit)"},
     {id : "nb_annonces", name : "Nombre total d'annonces"},
     {id : "occup_max_moy", name : "Capacité maximale moyenne"}
-]
+];
 
 // Déclaration des variables
 let quartierData;
@@ -20,8 +20,9 @@ let chartQuartierScaleX;
 let chartQuartierScaleY;
 let chartQuartierColorScale;
 
-let currentDimension = "prix_moyen"
-let currentNbgh = "Diagonal Mar i el Front Marítim del Poblenou"
+// Variables courantes
+let currentDimension = "prix_moyen";
+let currentNbgh = "Diagonal Mar i el Front Marítim del Poblenou";
 
 // Fonction setup
 function setup() {
@@ -51,26 +52,28 @@ function loadData() {
 function onDataLoaded(data) {
     
     quartierData = data;
-
-    //Inverse de l'array permettant de changer l'ordre d'apparition des quartiers
+    
+    // Inverse de l'array permettant de changer l'ordre d'apparition des quartiers
     reversedQuartierData = quartierData.slice().reverse();
     
+    // Ajout des options aux menus déroulants
     optionsSetAndRefresh();
-
-    optionsSetAndRefreshInfo()
+    optionsSetAndRefreshInfo();
     
+    // Visualisation des dimensions(prix med, priy moy, ...) pour tous les quartiers
     setupChartQuartier(currentDimension);
-    
     graphChartQuartier(currentDimension);
     
+    // Visualisation des types de logement pour un quartier
     setupInfo(currentNbgh);
-
     graphInfo(currentNbgh);
-
+    
+    // Affichage des informations spécifique à un quartier
     infoRight(currentNbgh);
     
 }
 
+// Création d'un objet permettant l'affichage itératif
 function retrieveDataNbgh(dataSet, nbghX) {
     const tableau = [
         {
@@ -90,10 +93,11 @@ function retrieveDataNbgh(dataSet, nbghX) {
             "val": dataSet.filter(d => d.quartier === nbghX)[0]["nb_chambre_ptg"]
         }
     ];
-
+    
     return tableau
 }
 
+// Création d'un objet permettant l'affichage itératif
 function retrieveStatsNbgh(dataSet, nbghX) {
     const tableau = [
         {
@@ -124,6 +128,7 @@ function retrieveStatsNbgh(dataSet, nbghX) {
     return tableau
 }
 
+// Fonction d'ajout des options au menu déroulant "Dimension" + MaJ selected
 function optionsSetAndRefresh() {
     d3.select("#dimensions")
     .selectAll("option")
@@ -142,10 +147,11 @@ function optionsSetAndRefresh() {
     })
 }
 
+// Fonction d'ajout des options au menu déroulant "Quartier" + MaJ selected
 function optionsSetAndRefreshInfo() {
     
-    const neighbourhoods = quartierData.map(d => d.quartier)
- 
+    const neighbourhoods = quartierData.map(d => d.quartier);
+    
     d3.select("#neighbourhoods")
     .selectAll("option")
     .data(neighbourhoods)
@@ -163,14 +169,15 @@ function optionsSetAndRefreshInfo() {
     })
 }
 
+//Fonction permettant de créer le svg, les axes, les échelles + MaJ de la page lors du changement d'option (graphe dimension)
 function setupChartQuartier(dimension) {
-
+    
     // Si un svg existe, il est d'abord supprimé
     const oldSvg = d3.select(".quartierChart")
     .select("svg")
     
     if (oldSvg) {
-        oldSvg.remove()
+        oldSvg.remove();
     }
     
     // Création du SVG pour cette visualisation
@@ -226,6 +233,7 @@ function setupChartQuartier(dimension) {
     })
 }
 
+//Fonction permettant de créer le svg, les axes, les échelles + MaJ de la page lors du changement d'option (graphe type logement)
 function setupInfo(neighbourhood) {
     
     // Si un svg existe, il est d'abord supprimé
@@ -233,7 +241,7 @@ function setupInfo(neighbourhood) {
     .select("svg")
     
     if (oldSvgBis) {
-        oldSvgBis.remove()
+        oldSvgBis.remove();
     }
     
     // Création du SVG pour cette visualisation
@@ -254,7 +262,7 @@ function setupInfo(neighbourhood) {
         "Chambre privée",
         "Chambre d'hôtel",
         "Chambre partagée"
-    ]
+    ];
     
     // Axe vertical
     chartInfoScaleY = d3.scaleBand()
@@ -298,6 +306,7 @@ function setupInfo(neighbourhood) {
     })
 }
 
+//Fonction permettant d'ajouter les barres et titres du graphe (graphe dimension)
 function graphChartQuartier(dimension) {
     
     const data = reversedQuartierData;
@@ -310,7 +319,7 @@ function graphChartQuartier(dimension) {
     .attr("height", chartQuartierScaleY.bandwidth())
     .attr("x", d => chartQuartierScaleX(0))
     .attr("y", d => chartQuartierScaleY(d.quartier))
-    .style("fill", d => chartQuartierColorScale(d[dimension]))
+    .style("fill", d => chartQuartierColorScale(d[dimension]));
     
     // Ajout des titres
     chartQuartierTitles.selectAll("text")
@@ -319,11 +328,13 @@ function graphChartQuartier(dimension) {
     .attr("dy", "0.35em")
     .attr("x", d => chartQuartierScaleX(d[dimension]) + 15)
     .attr("y", d => chartQuartierScaleY(d.quartier))
-    .text(d => d[dimension])
+    .text(d => d[dimension]);
 }
 
+//Fonction permettant d'ajouter les barres et titres du graphe (graphe type logement)
 function graphInfo(neighbourhood) {
     
+    // Création d'un nouvel objet pour l'affichage itératif
     const data = retrieveDataNbgh(quartierData, currentNbgh);
     
     // Ajout des barres
@@ -334,7 +345,7 @@ function graphInfo(neighbourhood) {
     .attr("height", chartInfoScaleY.bandwidth())
     .attr("x", d => chartInfoScaleX(0))
     .attr("y", d => chartInfoScaleY(d.dim))
-    .style("fill", d => chartInfoColorScale(d.val))
+    .style("fill", d => chartInfoColorScale(d.val));
     
     // Ajout des titres
     chartInfoTitles.selectAll("text")
@@ -343,17 +354,18 @@ function graphInfo(neighbourhood) {
     .attr("dy", "0.35em")
     .attr("x", d => chartInfoScaleX(d.val) + 15)
     .attr("y", d => chartInfoScaleY(d.dim))
-    .text(d => d.val)
+    .text(d => d.val);
 }
 
+// Fonction d'affichage des informations pour un quartier (droite)
 function infoRight(neighbourhood) {
     
     // Si un svg existe, il est d'abord supprimé
     const oldSvg = d3.select(".rightInfo")
-    .select("svg")
+    .select("svg");
     
     if (oldSvg) {
-        oldSvg.remove()
+        oldSvg.remove();
     }
     
     // Création du SVG pour cette visualisation
@@ -362,55 +374,60 @@ function infoRight(neighbourhood) {
     .attr("width", width)
     .attr("height", height)
     .attr("style", "font: 12px sans-serif");
-
+    
+    // Création d'un groupe pour le nom du quartier
     infoRightTitle = svg.append("g")
     .style("fill", "#800000")
     .attr("text-anchor", "middle")
     .attr("transform", `translate(-305, 120)`)
     .attr("class" , "nbghTitle");
-
+    
+    // Création d'un groupe pour les dimensions (prix moy, prix med, ...)
     chartDimRight = svg.append("g")
     .style("fill", "black")
     .style("font-size", "16px")
     .style("font-weight", "bold")
     .attr("text-anchor", "start")
     .attr("transform", `translate(-340, 120)`);
-
+    
+    // Création d'un groupe pour les valeurs associées aux dimensions
     chartInfoRight = svg.append("g")
     .style("fill", "black")
     .style("font-size", "16px")
     .attr("text-anchor", "start")
     .attr("transform", `translate(-70, 120)`);
-
-    const data = retrieveStatsNbgh(quartierData, currentNbgh)
-
-    console.log(data);
-
+    
+    // Création d'un nouvel objet pour l'affichage itératif
+    const data = retrieveStatsNbgh(quartierData, currentNbgh);
+    
+    // Ajout du nom du quartier
     infoRightTitle.selectAll("text")
     .data([1])
     .join("text")
     .attr("dy", "0.35em")
     .attr("x", 520)
     .attr("y", 25)
-    .text(currentNbgh)
-
+    .text(currentNbgh);
+    
+    // Ajout de l'ititulé des dimensions (prix moy, prix med, ...)
     chartDimRight.selectAll("text")
     .data(data)
     .join("text")
     .attr("dy", "0.35em")
     .attr("x", d => 400)
     .attr("y", d => 100 + data.indexOf(d)*70)
-    .text(d => d.dim + " :")
-
+    .text(d => d.dim + " :");
+    
+    // Ajout des valeurs des dimensions (prix moy, prix med, ...)
     chartInfoRight.selectAll("text")
     .data(data)
     .join("text")
     .attr("dy", "0.35em")
     .attr("x", d => 400)
     .attr("y", d => 100 + data.indexOf(d)*70)
-    .text(d => d.val)
-
+    .text(d => d.val);
+    
 }
 
-// Appel à setup
-setup()
+// Lancement du script
+setup();
