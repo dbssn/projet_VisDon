@@ -77,7 +77,7 @@ function onDataLoaded(data) {
 function retrieveDataNbgh(dataSet, nbghX) {
     const tableau = [
         {
-            "dim" : "Logements entiers",
+            "dim" : "Logement entier",
             "val" : dataSet.filter(d => d.quartier === nbghX)[0]["nb_log_entier"]
         },
         {
