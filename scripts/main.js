@@ -5,8 +5,8 @@ const margin = { top: 20, right: 50, bottom: 20, left: 230 };
 
 // Dictionnaire des dimensions
 const dimensions = [
-    {id : "prix_moyen", name : "Prix moyen par personne"},
-    {id : "prix_med", name : "Prix médian par personne"},
+    {id : "prix_moyen", name : "Prix moyen par personne (1 nuit)"},
+    {id : "prix_med", name : "Prix médian par personne (1 nuit)"},
     {id : "nb_annonces", name : "Nombre total d'annonces"},
     {id : "occup_max_moy", name : "Capacité maximale moyenne"}
 ]
@@ -97,19 +97,19 @@ function retrieveDataNbgh(dataSet, nbghX) {
 function retrieveStatsNbgh(dataSet, nbghX) {
     const tableau = [
         {
-            "dim" : "Prix moyen",
+            "dim" : "Prix moyen (pp./nuit)",
             "val" : dataSet.filter(d => d.quartier === nbghX)[0]["prix_moyen"]
         },
         {
-            "dim" : "Prix médian",
+            "dim" : "Prix médian (pp./nuit)",
             "val" : dataSet.filter(d => d.quartier === nbghX)[0]["prix_med"]
         },
         {
-            "dim" : "Prix minimum",
+            "dim" : "Prix minimum (pp./nuit)",
             "val" : dataSet.filter(d => d.quartier === nbghX)[0]["prix_min"]
         },
         {
-            "dim" : "Prix maximum",
+            "dim" : "Prix maximum (pp./nuit)",
             "val": dataSet.filter(d => d.quartier === nbghX)[0]["prix_max"]
         },
         {

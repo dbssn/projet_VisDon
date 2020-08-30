@@ -68,3 +68,14 @@ h2 {
     font-size: 20px;
     font-weight: bold;
 }
+
+.notes {
+    position: absolute;
+    top: 930px;
+    left: 20px;
+}
+
+#notes {
+    color: red;
+    font-weight: bold;
+}
